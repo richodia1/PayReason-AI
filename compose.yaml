@@ -1,0 +1,63 @@
+name: payreason
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-payreason}
+      POSTGRES_USER: ${POSTGRES_USER:-payreason}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+    ports:
+      - "127.0.0.1:${POSTGRES_PORT:-5544}:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+  platform-api:
+    build:
+      context: .
+      dockerfile: services/platform-api/Dockerfile
+    environment:
+      DATABASE_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB:-payreason}
+      POSTGRES_USER: ${POSTGRES_USER:-payreason}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+      API_BIND_ADDRESS: 0.0.0.0
+      API_PORT: 8180
+      PAYREASON_ADMIN_USERNAME: ${PAYREASON_ADMIN_USERNAME:-admin}
+      PAYREASON_ADMIN_PASSWORD: ${PAYREASON_ADMIN_PASSWORD:?Set PAYREASON_ADMIN_PASSWORD in .env}
+      PAYPAL_CLIENT_ID: ${PAYPAL_CLIENT_ID:-}
+      PAYPAL_CLIENT_SECRET: ${PAYPAL_CLIENT_SECRET:-}
+      PAYPAL_WEBHOOK_ID: ${PAYPAL_WEBHOOK_ID:-}
+      PAYPAL_RETURN_URL: ${PAYPAL_RETURN_URL:-http://127.0.0.1:5180/}
+      AI_BASE_URL: http://ai-service:8181
+    ports:
+      - "127.0.0.1:${API_PORT:-8180}:8180"
+    depends_on:
+      postgres:
+        condition: service_healthy
+  ai-service:
+    build: services/ai-service
+    ports:
+      - "127.0.0.1:${AI_PORT:-8181}:8181"
+  web:
+    build: apps/web
+    ports:
+      - "127.0.0.1:${WEB_PORT:-5180}:8080"
+    depends_on:
+      - platform-api
+  rabbitmq:
+    image: rabbitmq:4-management-alpine
+    profiles: [events]
+    environment:
+      RABBITMQ_DEFAULT_USER: payreason
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD:?Set RABBITMQ_PASSWORD in .env for the events profile}
+    ports:
+      - "127.0.0.1:5684:5672"
+      - "127.0.0.1:15684:15672"
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+volumes:
+  postgres-data:
+  rabbitmq-data:

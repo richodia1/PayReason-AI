@@ -1,0 +1,37 @@
+{
+  "version": "synthetic-logistic-v1",
+  "source": "SYNTHETIC_DEMO",
+  "seed": 20261106,
+  "features": [
+    "amount_ratio",
+    "account_age_days",
+    "transactions_last_hour",
+    "new_device",
+    "cross_border"
+  ],
+  "mean": [
+    1.497906445103148,
+    1822.7866666666666,
+    1.9958333333333333,
+    0.20472222222222222,
+    0.29680555555555554
+  ],
+  "scale": [
+    1.6797103319386861,
+    1058.164400974105,
+    1.4052419226280253,
+    0.40349849312061215,
+    0.45685010424306255
+  ],
+  "coefficients": [
+    0.8143238337841974,
+    -0.87597308089627,
+    0.6681226266955644,
+    0.5219363285250973,
+    0.21775391326446863
+  ],
+  "intercept": -3.1562256138640015,
+  "review_threshold": 0.25,
+  "high_threshold": 0.6,
+  "limitation": "Synthetic-data model. Scores are not validated probabilities of real fraud. Human review required."
+}

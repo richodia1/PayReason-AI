@@ -1,0 +1,25 @@
+{
+  "source": "Synthetic generator in ml/training/train_demo.py; no external data",
+  "seed": 20261106,
+  "rows": 12000,
+  "train_rows": 7200,
+  "validation_rows": 2400,
+  "test_rows": 2400,
+  "positive_rows": 1039,
+  "sklearn_version": "1.8.0",
+  "dataset_sha256": "c9613096fba1341f62d3607a6f549f100efed267765f06d0e9318b85e6442463",
+  "thresholds": "Illustrative fixed bands 0.25 and 0.60, not optimized for real fraud costs.",
+  "limitations": "Synthetic-data model. Scores are not validated probabilities of real fraud. Human review required.",
+  "validation": {
+    "roc_auc": 0.8351632685289163,
+    "average_precision": 0.5105798098670684,
+    "brier_score": 0.05799607658845728,
+    "positive_rate": 0.08666666666666667
+  },
+  "test": {
+    "roc_auc": 0.856122350505334,
+    "average_precision": 0.4859592253602046,
+    "brier_score": 0.059461336003978904,
+    "positive_rate": 0.08666666666666667
+  }
+}

@@ -1,0 +1,9 @@
+.git
+.env*
+**/node_modules
+**/target
+**/dist
+**/.venv
+.local
+data
+ml/artifacts

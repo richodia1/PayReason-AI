@@ -1,0 +1,51 @@
+server:
+  address: ${API_BIND_ADDRESS:127.0.0.1}
+  port: ${API_PORT:8180}
+  servlet:
+    session:
+      timeout: 30m
+      cookie:
+        name: PAYREASON_SESSION
+        http-only: true
+        same-site: strict
+        secure: ${PAYREASON_COOKIE_SECURE:false}
+spring:
+  mvc:
+    problemdetails:
+      enabled: true
+  application:
+    name: payreason-platform-api
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5544/payreason}
+    username: ${POSTGRES_USER:payreason}
+    password: ${POSTGRES_PASSWORD}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+  flyway:
+    enabled: true
+  jackson:
+    deserialization:
+      fail-on-unknown-properties: true
+      accept-float-as-int: false
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: never
+payreason:
+  security:
+    username: ${PAYREASON_ADMIN_USERNAME:admin}
+    password: ${PAYREASON_ADMIN_PASSWORD}
+  paypal:
+    base-url: https://api-m.sandbox.paypal.com
+    return-url: ${PAYPAL_RETURN_URL:http://127.0.0.1:5180/}
+    client-id: ${PAYPAL_CLIENT_ID:}
+    client-secret: ${PAYPAL_CLIENT_SECRET:}
+    webhook-id: ${PAYPAL_WEBHOOK_ID:}
+  ai:
+    base-url: ${AI_BASE_URL:http://127.0.0.1:8181}
