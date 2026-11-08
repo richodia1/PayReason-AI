@@ -6,6 +6,7 @@ import ai.payreason.payments.enums.PaymentStatus;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.util.Locale;
 import java.util.UUID;
 
 @Entity
@@ -30,7 +31,7 @@ public class PaymentDraft {
 
     public PaymentDraft(UUID id, CreatePaymentRequest request, OffsetDateTime now) {
         this.id = id;
-        reference = request.reference().strip();
+        reference = "PR-" + id.toString().replace("-", "").toUpperCase(Locale.ROOT);
         customerReference = normalize(request.customerReference());
         amount = request.amount();
         currency = request.currency();
@@ -41,8 +42,7 @@ public class PaymentDraft {
     }
 
     public boolean matches(CreatePaymentRequest request) {
-        return reference.equals(request.reference().strip())
-                && java.util.Objects.equals(customerReference, normalize(request.customerReference()))
+        return java.util.Objects.equals(customerReference, normalize(request.customerReference()))
                 && amount.compareTo(request.amount()) == 0 && currency.equals(request.currency())
                 && channel == request.channel();
     }

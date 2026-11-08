@@ -14,8 +14,10 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
     @Bean
     UserDetailsService users(@Value("${payreason.security.username}") String username,
-                            @Value("${payreason.security.password}") String password) {
-        if (username.isBlank() || password.length() < 12) {
+                            @Value("${payreason.security.password}") String password,
+                            @Value("${payreason.security.allow-local-demo-login:false}") boolean allowLocalDemoLogin) {
+        boolean localDemoLogin = allowLocalDemoLogin && "admin".equals(username) && "admin".equals(password);
+        if (username.isBlank() || (!localDemoLogin && password.length() < 12)) {
             throw new IllegalStateException("Set an administrator username and a password of at least 12 characters.");
         }
         return new InMemoryUserDetailsManager(User.withUsername(username)

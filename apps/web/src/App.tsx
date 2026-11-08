@@ -60,8 +60,7 @@ export function NewPaymentDialog({ open, onClose, onSaved }: { open: boolean; on
       <DialogTitle id="new-payment-title">New payment draft</DialogTitle>
       <DialogContent><div className="form-fields">
         {error && <Alert severity="error">{error}</Alert>}
-        <TextField label="Order reference" name="reference" required slotProps={{ htmlInput: { maxLength: 80 } }} autoFocus />
-        <div className="form-pair"><TextField label="Amount" name="amount" type="number" required slotProps={{ htmlInput: { min: '0.01', max: '999999999999.99', step: '0.01' } }} />
+        <div className="form-pair"><TextField label="Amount" name="amount" type="number" required autoFocus slotProps={{ htmlInput: { min: '0.01', max: '999999999999.99', step: '0.01' } }} />
           <TextField select label="Currency" name="currency" defaultValue="GBP">{['GBP', 'USD', 'EUR'].map(currency => <MenuItem key={currency} value={currency}>{currency}</MenuItem>)}</TextField></div>
         <TextField label="Customer reference" name="customerReference" slotProps={{ htmlInput: { maxLength: 80 } }} />
         <TextField select label="Channel" name="channel" defaultValue="WEB"><MenuItem value="WEB">Web</MenuItem><MenuItem value="MOBILE">Mobile</MenuItem></TextField>

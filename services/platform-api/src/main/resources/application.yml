@@ -41,6 +41,7 @@ payreason:
   security:
     username: ${PAYREASON_ADMIN_USERNAME:admin}
     password: ${PAYREASON_ADMIN_PASSWORD}
+    allow-local-demo-login: ${PAYREASON_ALLOW_LOCAL_DEMO_LOGIN:false}
   paypal:
     base-url: https://api-m.sandbox.paypal.com
     return-url: ${PAYPAL_RETURN_URL:http://127.0.0.1:5180/}

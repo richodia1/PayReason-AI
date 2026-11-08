@@ -16,7 +16,14 @@ PayPal Sandbox payments with explainable risk assessment and human-controlled se
 - Latest-case and case-count questions with references to database records.
 - React merchant console, Swagger contracts, Docker Compose and automated tests.
 
-**PayPal calls have been tested against an HTTP fixture, not a real Sandbox account yet.** Configure Sandbox credentials and complete the live checks below before presenting a finished PayPal integration. Missing credentials or model failures never produce fake payment results.
+**Verification as of 8 November 2026:** real PayPal Sandbox authentication and order creation have succeeded, including a buyer-approval URL returned by PayPal. Buyer approval, authorization, capture, void and signed webhook delivery still require live Sandbox verification. Automated provider tests use an HTTP fixture. Missing credentials or model failures never produce fake payment results.
+
+Public source: [richodia1/PayReason-AI](https://github.com/richodia1/PayReason-AI).
+For evaluation, start with the [judge walkthrough](docs/judge-guide.md).
+
+![PayReason merchant workspace with fictional local demonstration records](docs/images/payment-register.png)
+
+[View the working application gallery](docs/gallery.md).
 
 ## Quick start
 
@@ -32,6 +39,8 @@ docker compose up --build -d
 - Python docs: http://127.0.0.1:8181/docs
 
 Wait for the Java API to finish startup. Local demo sign-in: `admin` / `payreason-local-only`. All exposed ports bind to loopback. Replace the example passwords before any shared deployment. This bootstrap identity is administrator-only, not multi-tenant authentication.
+
+For local-only testing with `admin` / `admin`, set `PAYREASON_ADMIN_PASSWORD=admin` and `PAYREASON_ALLOW_LOCAL_DEMO_LOGIN=true` in `.env`, keeping the username `admin`. This opt-in exception is disabled by default; all other passwords still require at least 12 characters. Disable it and choose a strong password before any shared deployment. Restart the API after changing these settings.
 
 Without PayPal credentials, create a draft, assess a sample, record a review and explore Cases / Case insights. These operations use the real database and Python model. Checkout remains unavailable until credentials are configured.
 
@@ -108,7 +117,7 @@ node scripts/package-source.mjs
 
 Creates a source-only ZIP under ignored `.local/releases/`, checks its manifest and excludes local environment files, databases, dependencies and build output. Review the archive before public distribution. The script does not upload or push anything.
 
-[Demonstration outline and final submission checklist](docs/demo-script.md) / [Milestones](docs/roadmap.md) / [Provenance](docs/provenance.md)
+[Timed demonstration script](docs/demo-script.md) / [Submission text and checklist](docs/submission.md) / [Milestones](docs/roadmap.md) / [Provenance](docs/provenance.md)
 
 ## Deployment limits
 

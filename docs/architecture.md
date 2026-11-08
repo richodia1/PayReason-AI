@@ -39,8 +39,10 @@ All routes below except session bootstrap/login and signed webhook delivery requ
 Payment creation:
 
 ```json
-{"reference":"SANDBOX-001","customerReference":"DEMO-CUSTOMER","amount":"75.25","currency":"GBP","channel":"WEB"}
+{"customerReference":"DEMO-CUSTOMER","amount":"75.25","currency":"GBP","channel":"WEB"}
 ```
+
+The server assigns `reference` as `PR-` followed by the payment UUID's 32 uppercase hexadecimal characters. It is returned in the response, not accepted in the creation request. Reusing the same Idempotency-Key with the same payment details returns the original record and reference; different details return 409. Existing records retain their references.
 
 Assessment input (synthetic sample signals):
 

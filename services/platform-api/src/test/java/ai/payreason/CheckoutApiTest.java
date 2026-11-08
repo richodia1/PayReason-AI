@@ -138,7 +138,7 @@ class CheckoutApiTest {
     }
     String draft() throws Exception {
         String id = UUID.randomUUID().toString();
-        assertEquals(200, call("POST", "/api/payments", "{\"reference\":\"SANDBOX-TEST\",\"amount\":\"10.00\",\"currency\":\"USD\",\"channel\":\"MOBILE\"}", id).statusCode()); return id;
+        assertEquals(200, call("POST", "/api/payments", "{\"amount\":\"10.00\",\"currency\":\"USD\",\"channel\":\"MOBILE\"}", id).statusCode()); return id;
     }
     String path(String id, String action) { return "/api/payments/" + id + "/paypal/" + action; }
     void assess(String id) throws Exception {

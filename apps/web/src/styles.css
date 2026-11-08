@@ -137,7 +137,7 @@ tbody tr:hover { background: #fafcfb; }
 .insights form button { flex-shrink: 0; min-height: 56px; }
 .question-options { margin-top: 20px; }
 .insight-result { border-block: 1px solid #dce5e4; margin-top: 28px; padding: 28px 0; }
-.insight-result h2 { margin-top: 16px; font-size: 20px; }
+.insight-result h2 { margin-top: 16px; font-size: 20px; overflow-wrap: anywhere; }
 .insight-result p { font-size: 12px; line-height: 1.7; }
 .evidence-list { list-style: none; padding: 0; margin: 28px 0; }
 .evidence-list li { display: grid; gap: 8px; border-top: 1px solid #e1e7e8; padding: 18px 0; font-size: 12px; }

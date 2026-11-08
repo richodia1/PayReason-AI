@@ -11,7 +11,7 @@ describe('Payment draft form', () => {
       .mockResolvedValueOnce(new Response(JSON.stringify({ id: 'created' })))
     const onClose = vi.fn(); const onSaved = vi.fn(); const user = userEvent.setup()
     render(<NewPaymentDialog open onClose={onClose} onSaved={onSaved} />)
-    await user.type(screen.getByLabelText(/Order reference/), 'ORDER-101')
+    expect(screen.queryByLabelText(/Order reference/)).not.toBeInTheDocument()
     await user.type(screen.getByLabelText(/Amount/), '12.34')
     await user.click(screen.getByRole('button', { name: 'Save draft' }))
     await waitFor(() => expect(onClose).toHaveBeenCalledOnce())
@@ -19,6 +19,7 @@ describe('Payment draft form', () => {
     const options = fetchMock.mock.calls[1][1]!
     expect((options.headers as Headers).get('Idempotency-Key')).toBeTruthy()
     expect(JSON.parse(String(options.body)).amount).toBe('12.34')
+    expect(JSON.parse(String(options.body))).not.toHaveProperty('reference')
   })
 
   it('keeps the form and entered values after a server error', async () => {
@@ -26,11 +27,12 @@ describe('Payment draft form', () => {
       .mockResolvedValueOnce(new Response(JSON.stringify({ detail: 'Database unavailable' }), { status: 503 }))
     const onClose = vi.fn(); const user = userEvent.setup()
     render(<NewPaymentDialog open onClose={onClose} onSaved={vi.fn()} />)
-    await user.type(screen.getByLabelText(/Order reference/), 'RETRY-101')
+    await user.type(screen.getByLabelText(/Customer reference/), 'RETRY-101')
     await user.type(screen.getByLabelText(/Amount/), '10.00')
     await user.click(screen.getByRole('button', { name: 'Save draft' }))
     expect(await screen.findByText('Database unavailable')).toBeInTheDocument()
-    expect(screen.getByLabelText(/Order reference/)).toHaveValue('RETRY-101')
+    expect(screen.getByLabelText(/Customer reference/)).toHaveValue('RETRY-101')
+    expect(screen.getByLabelText(/Amount/)).toHaveValue(10)
     expect(onClose).not.toHaveBeenCalled()
   })
 })

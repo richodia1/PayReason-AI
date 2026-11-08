@@ -49,7 +49,7 @@ class PaymentApiTest {
     }
 
     String draft(String amount) {
-        return "{\"reference\":\"TEST-ORDER\",\"amount\":\"" + amount
+        return "{\"amount\":\"" + amount
                 + "\",\"currency\":\"GBP\",\"channel\":\"WEB\"}";
     }
 
@@ -70,7 +70,12 @@ class PaymentApiTest {
         assertEquals("12.34", payment.get("amount").asText());
         assertEquals("DRAFT", payment.get("status").asText());
         assertEquals(id, payment.get("id").asText());
-        assertEquals(200, request("POST", "/api/payments", draft("12.34"), id, true).statusCode());
+        String reference = payment.get("reference").asText();
+        assertTrue(reference.matches("PR-[0-9A-F]{32}"));
+        var retry = request("POST", "/api/payments", draft("12.34"), id, true);
+        assertEquals(200, retry.statusCode());
+        assertEquals(reference, json.readTree(retry.body()).get("reference").asText());
+        assertEquals(reference, json.readTree(request("GET", "/api/payments/" + id, null, null, false).body()).get("reference").asText());
         assertEquals(409, request("POST", "/api/payments", draft("20.00"), id, true).statusCode());
         var activity = json.readTree(request("GET", "/api/payments/" + id + "/activity", null, null, false).body());
         assertEquals(1, activity.size());
@@ -79,6 +84,23 @@ class PaymentApiTest {
         assertEquals("CANCELLED", json.readTree(cancelled.body()).get("status").asText());
         assertEquals(200, request("POST", "/api/payments/" + id + "/cancel", null, null, true).statusCode());
         assertEquals(2, json.readTree(request("GET", "/api/payments/" + id + "/activity", null, null, false).body()).size());
+    }
+
+    @Test
+    void generatesDifferentReferencesForNewPaymentsAndRejectsManualReferences() throws Exception {
+        login();
+        var first = request("POST", "/api/payments", draft("15.00"), UUID.randomUUID().toString(), true);
+        var second = request("POST", "/api/payments", draft("15.00"), UUID.randomUUID().toString(), true);
+        assertEquals(200, first.statusCode());
+        assertEquals(200, second.statusCode());
+        assertNotEquals(json.readTree(first.body()).get("reference").asText(), json.readTree(second.body()).get("reference").asText());
+        var manual = json.createObjectNode().put("reference", "MANUAL-REFERENCE")
+                .put("amount", "15.00").put("currency", "GBP").put("channel", "WEB");
+        assertEquals(400, request("POST", "/api/payments", json.writeValueAsString(manual), UUID.randomUUID().toString(), true).statusCode());
+        var schema = json.readTree(request("GET", "/v3/api-docs", null, null, false).body())
+                .path("components").path("schemas").path("CreatePaymentRequest").path("properties");
+        assertTrue(schema.has("amount"));
+        assertFalse(schema.has("reference"));
     }
 
     @Test

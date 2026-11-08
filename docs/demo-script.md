@@ -1,32 +1,96 @@
-# Demonstration outline
+# Three-minute demonstration plan
 
-Keep the final recording below three minutes. Only claim the flows actually shown running. Never reveal `.env`, passwords, client secrets or real customer data in the video.
+Target length: **2 minutes 45 seconds**, leaving a margin under the three-minute
+limit. Use actual application footage, not slides masquerading as working payment
+operations. No music or external artwork is needed.
 
-## 0:00-0:20 / Problem and boundaries
+## Before recording
 
-PayReason AI is a PayPal Sandbox payment-risk review prototype. It combines a synthetic-data ML experiment with exact model contributions and a human-controlled capture gate. Explain that the model is not validated on real fraud.
+- Start the application and reload old open browser tabs.
+- Use a desktop viewport around 1440 x 960; close unrelated tabs and notifications.
+- Sign in before recording. Do not record passwords, `.env`, developer credentials,
+  buyer login, account balances or personal details.
+- Prepare fictional GBP 1.00 Sandbox examples using distinct test buyer and
+  merchant accounts. Complete buyer approval immediately before recording.
+- Keep one low-risk, authorized example on HOLD ready for RELEASE/capture, and
+  one high-risk, authorized example ready for BLOCK/void.
+- If buyer approval is unavailable, show only order creation, model evidence and
+  review controls, and explicitly state that settlement has not been demonstrated.
+  Do not narrate capture/void as successful or use fixture footage as live evidence.
 
-## 0:20-1:10 / Assessment
+## 0:00-0:15 / Payment register
 
-Open a payment draft, assess the elevated-risk sample, show the score and the actual feature values/contributions. Explain that payment state and review decision are distinct. Show the immutable assessment, reviewer reason and audit timeline.
+> PayReason AI connects payment risk explanations with human review before
+> capture. This is a PayPal Sandbox prototype for merchants, not a production
+> fraud detector. All examples and training data are synthetic.
 
-## 1:10-2:10 / PayPal flow
+Show the running merchant workspace and open the prepared sample.
 
-With configured Sandbox credentials, create an order, complete buyer approval, authorize, and inspect the PayPal IDs. Show HOLD preventing capture, then explicitly RELEASE and capture. Use a second pre-authorized Sandbox example to show BLOCK followed by void when time permits. Do not replace a missing real integration with fixture footage labelled as PayPal.
+## 0:15-0:50 / Risk assessment and evidence
 
-## 2:10-2:45 / Case evidence
+> A logistic regression model evaluates five signals, including transaction
+> velocity and a new-device flag. The interface shows the observed values and
+> each feature's exact contribution to the score. This explains the model's
+> calculation, not proof that a customer committed fraud.
 
-Open the case queue, filter by channel/decision, then ask the latest-case or count question. Open a cited record. Counts come from the database; this is constrained query reporting, not generative RAG.
+Assess a fresh sample or show its immutable assessment. Keep the score, observed
+features and contribution bars visible. Do not imply that PayPal supplies these
+demo signals automatically.
 
-## 2:45-2:55 / Close
+## 0:50-1:35 / Human-controlled PayPal capture
 
-Show the repository README, reproducible synthetic-training report and Docker instructions. State outstanding limitations briefly. Include only verified links in the submission.
+Use this narration **only after live Sandbox verification**:
 
-## Upload checklist
+> This buyer-approved payment is authorized, but not captured. The assessment
+> starts on HOLD. I record my review reason and release the payment. Capture is a
+> separate explicit action. PayPal confirms the result, and the application stores
+> the capture ID alongside its activity history.
 
-- Source archive inspected for credentials, local databases, private documents and dependency folders.
-- README and model card accurately distinguish implemented code, fixture-tested integration and real Sandbox verification.
-- Configure Sandbox credentials locally and run capture, void and real signed webhook tests before claiming the PayPal demo is complete.
-- Create the intended GitHub repository and set the visibility required by the event rules.
-- Record and upload the final video to YouTube, then add its verified link to the submission.
-- Review the current event eligibility, existing-project disclosure and deadline rules before submitting.
+Show authorized status and HOLD. Save RELEASE with a demonstration note,
+confirm capture, and wait for the actual provider result before describing it.
+If PayPal returns PENDING, say pending and reconcile; do not call it settled.
+
+Fallback while buyer approval is pending:
+
+> The application has created this order in real PayPal Sandbox and received a
+> buyer-approval link. Buyer-approved settlement is still awaiting verification;
+> the authorization, capture and void contracts are covered by fixture tests.
+
+## 1:35-1:55 / Block and void
+
+For a second authorized test payment, show high-risk evidence, record BLOCK with
+a reason, and explicitly void. Show the actual VOIDED result and activity.
+Skip this live claim if not verified; use the time to show the persisted BLOCK
+review and explain that a review decision alone does not move money.
+
+## 1:55-2:25 / Case queue and evidence query
+
+> Every assessed payment appears in the case queue. I can filter by channel,
+> decision and year, then inspect the evidence. These supported questions use
+> database queries and link to matching cases. They are not a generative
+> chatbot, and a case is not automatically confirmed fraud.
+
+Ask `How many blocked cases from web this year?`, show its result and open a
+cited case. Do not read a prewritten number; the count changes with local records.
+
+## 2:25-2:45 / Reproducibility and close
+
+> The public repository includes Docker instructions, the reproducible synthetic
+> model and automated tests. PayReason keeps the score, the human decision and
+> the payment outcome distinct, so reviewers can inspect what happened and why.
+
+Show the repository and briefly mention any still-unverified integration stages.
+
+## Export and submission
+
+Record the application window with the operating system's screen recorder and a
+microphone, or another recorder you already trust. Export a clear MP4 where possible.
+Review the complete video before uploading; remove any accidental credential or
+personal-data exposure. Keep it below three minutes.
+
+Upload to YouTube with visibility that lets judges watch without requesting access
+or entering a password, following the current event instructions. Test the final
+link while signed out. Add that actual URL to Devpost, along with the repository
+and the accurate text in [the submission pack](submission.md).
+
+Current status: **script prepared; video not yet recorded or uploaded**.
